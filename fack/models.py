@@ -22,6 +22,10 @@ class Topic(models.Model):
     def __unicode__(self):
         return self.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('faq_topic_detail', [self.slug])
+
 class Question(models.Model):
     HEADER = 2
     ACTIVE = 1
