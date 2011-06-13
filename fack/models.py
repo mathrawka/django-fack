@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from managers import QuestionManager
+from markdown import markdown
 
 class Topic(models.Model):
     """
@@ -38,6 +39,7 @@ class Question(models.Model):
     
     text = models.TextField(_('question'), help_text=_('The actual question itself.'))
     answer = models.TextField(_('answer'), blank=True, help_text=_('The answer text.'))
+    answer_html = models.TextField(_('answer_html'), blank=True)
     topic = models.ForeignKey(Topic, verbose_name=_('topic'), related_name='questions')
     slug = models.SlugField(_('slug'), max_length=100)
     status = models.IntegerField(_('status'),
@@ -72,6 +74,10 @@ class Question(models.Model):
     def save(self, *args, **kwargs):
         # Set the date updated.
         self.updated_on = datetime.datetime.now()
+
+        # If there is an answer, render it markdown to html
+        if self.answer:
+            self.answer_html = markdown(self.answer)
         
         # Create a unique slug, if needed.
         if not self.slug:

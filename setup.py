@@ -28,7 +28,7 @@ setup(
         'Framework :: Django',
     ],
     
-    install_requires = ['setuptools', 'Django >= 1.3'],
+    install_requires = ['setuptools', 'Django >= 1.3', 'Markdown'],
     test_suite = "fack._testrunner.runtests",
     tests_require = ["mock"],
 )
